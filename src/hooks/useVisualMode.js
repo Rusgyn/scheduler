@@ -1,16 +1,16 @@
-// const { result } = renderHook(() => useVisualMode(FIRST));
-
-// expect(result.current.mode).toBe(FIRST);
-
 import React from "react";
 import { useState } from "react";
 
-const useVisualMode = (element) => {
+const useVisualMode = (initialMode) => {
 
-  const [mode, setMode] = useState(element);
+  const [mode, setMode] = useState(initialMode);
+
+  const transition = (newMode) => {
+    setMode(newMode);
+  }
 
   return (
-    { mode }
+    { mode, transition }
   );
 }
 
