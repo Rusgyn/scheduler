@@ -4,6 +4,7 @@ import Header from "components/Appointment/Header";
 import Empty from "components/Appointment/Empty";
 import Show from "components/Appointment/Show";
 import useVisualMode from "hooks/useVisualMode";
+import Form from "./Form";
 
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
@@ -43,6 +44,11 @@ export default function Appointment(props) {
         />
         )
       }
+      {mode === CREATE && (
+        <Form 
+          interviewers = {props.interviews}
+        />
+      )}
     </article>
   );
 }
