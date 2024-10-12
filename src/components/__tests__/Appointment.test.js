@@ -24,6 +24,26 @@ describe("Appointment", () => {
     expect(getByPlaceholderText("Enter Student Name")).toBeInTheDocument(); // Check if the form is rendered
   });
 
+  // it("can save an interview and show it", () => {
+  //   const { getByAltText, getByPlaceholderText, getByText } = render(
+  //     <Appointment 
+  //       id={1} 
+  //       time="12pm" 
+  //       interviewers={[{ id: 1, name: "Sylvia Palmer" }]} 
+  //     />
+  //   );
+
+  //   fireEvent.click(getByAltText("Add"));
+    
+  //   fireEvent.change(getByPlaceholderText("Enter Student Name"), { target: { value: "John Doe" } });
+  //   fireEvent.click(getByText("Save"));
+
+  //   // After saving, we assume the appointment shows the student's name
+  //   expect(getByText("John Doe")).toBeInTheDocument();
+  //   expect(getByText("Interviewer")).toBeInTheDocument();
+  //   expect(getByText("Sylvia Palmer")).toBeInTheDocument();
+  // });
+
   it("transitions to EDIT mode when Edit button is clicked", () => {
     const { getByText, getByAltText } = render(
       <Appointment 
@@ -38,4 +58,20 @@ describe("Appointment", () => {
     expect(getByText("Save")).toBeInTheDocument(); // Check if the form is rendered
   });
 
+  // it("cancels an interview", () => {
+  //   const { getByText, getByAltText } = render(
+  //     <Appointment 
+  //       id={1} 
+  //       time="12pm" 
+  //       interviewers={[{ id: 1, name: "Sylvia Palmer" }]} 
+  //       interview={{ student: "John Doe", interviewer: { id: 1, name: "Sylvia Palmer" } }} 
+  //     />
+  //   );
+
+  //   fireEvent.click(getByAltText("Delete"));
+  //   fireEvent.click(getByText("Confirm"));
+
+  //   // After canceling, check that the appointment is not rendered
+  //   expect(getByText("John Doe")).not.toBeInTheDocument();
+  // });
 });
