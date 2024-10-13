@@ -5,6 +5,15 @@ import Appointment from "components/Appointment";
 afterEach(cleanup);
 
 describe("Appointment", () => {
+
+  const interviewers = [
+    {
+      id: 1,
+      student: "Sylvia Palmer",
+      avatar: "https://i.imgur.com/LpaY82x.png"
+    }
+  ];
+
   it("renders without crashing", () => {
     render(<Appointment id={1} time="12pm" interviewers={[]} />);
   });
@@ -17,11 +26,15 @@ describe("Appointment", () => {
 
   it("transitions to CREATE mode when Add button is clicked", () => {
     const { getByAltText, getByPlaceholderText } = render(
-      <Appointment id={1} time="12pm" interviewers={[{ id: 1, name: "Sylvia Palmer" }]} />
+      <Appointment
+        id={1} time="12pm"
+        interviewers = {interviewers}
+        // interviewers={[{ id: 1, name: "Sylvia Palmer" }]} 
+      />
     );
 
     fireEvent.click(getByAltText("Add"));
-    expect(getByPlaceholderText("Enter Student Name")).toBeInTheDocument(); // Check if the form is rendered
+    expect(getByPlaceholderText("Enter Student Name")).toBeInTheDocument(); 
   });
 
   // it("can save an interview and show it", () => {
@@ -29,7 +42,7 @@ describe("Appointment", () => {
   //     <Appointment 
   //       id={1} 
   //       time="12pm" 
-  //       interviewers={[{ id: 1, name: "Sylvia Palmer" }]} 
+  //       interviewers={interviewers} 
   //     />
   //   );
 
@@ -49,7 +62,7 @@ describe("Appointment", () => {
       <Appointment 
         id={1} 
         time="12pm" 
-        interviewers={[{ id: 1, name: "Sylvia Palmer" }]} 
+        interviewers={interviewers} 
         interview={{ student: "John Doe", interviewer: { id: 1, name: "Sylvia Palmer" } }} 
       />
     );
@@ -63,7 +76,7 @@ describe("Appointment", () => {
   //     <Appointment 
   //       id={1} 
   //       time="12pm" 
-  //       interviewers={[{ id: 1, name: "Sylvia Palmer" }]} 
+  //       interviewers={interviewers} 
   //       interview={{ student: "John Doe", interviewer: { id: 1, name: "Sylvia Palmer" } }} 
   //     />
   //   );
