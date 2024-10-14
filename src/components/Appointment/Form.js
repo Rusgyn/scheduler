@@ -11,17 +11,13 @@ export default function Form(props) {
 
   function reset() {
     setName("");
-    setInterviewer(null);
     setError("");
+    setInterviewer(null);
   }
 
   function cancel() {
     reset();
     props.onCancel();
-  }
-
-  function save() {
-    props.onSave(name, interviewer);
   }
 
   function validate() {
@@ -34,26 +30,15 @@ export default function Form(props) {
       setError("Please select an interviewer");
       return;
     }
-  
+    
+    setError("");
     props.onSave(name, interviewer);
-  }
-
-  function onClick(event) {
-    event.preventDefault();
-    if (validate()) {
-      save();
-    }
   }
 
   return (
     <main className="appointment__card appointment__card--create">
       <section className="appointment__card-left">
-        <form autoComplete="off"
-          onSubmit={ event => {
-            event.preventDefault();
-            save();
-            }
-          }>
+        <form autoComplete="off" onSubmit={event => {event.preventDefault()}}>
           <input
             className="appointment__create-input text--semi-bold"
             name="name"
@@ -82,7 +67,7 @@ export default function Form(props) {
           <Button danger onClick={cancel}>
             Cancel
           </Button>
-          <Button confirm onClick={onClick} >
+          <Button confirm onClick={validate} >
             Save
           </Button>
         </section>
