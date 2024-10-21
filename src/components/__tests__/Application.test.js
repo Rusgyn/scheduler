@@ -185,9 +185,39 @@ describe("Application", () => {
   
 
   /* test number seven */
-  it("shows the delete error when failing to delete an existing appointment", () => {
-
+  it("shows the delete error when failing to delete an existing appointment", async () => {
+    // Reset the fixtures before each test
+    axiosMock.resetFixtures();
+  
+    // Mock the axios.delete to reject the promise
+    axiosMock.delete.mockRejectedValueOnce(new Error("Could not cancel appointment."));
+  
+    // 1. Render the Application
+    const { container } = render(<Application />);
+  
+    // 2. Wait until the text "Archie Cohen" is displayed
+    await findByText(container, "Archie Cohen");
+  
+    // 3. Find the appointment to delete
+    const appointment = getAllByTestId(container, "appointment").find((appointment) => queryByText(appointment, "Archie Cohen"));
+  
+    // 4. Click the "Delete" button on that same appointment
+    fireEvent.click(getByAltText(appointment, "Delete"));
+  
+    // 5. Check that the confirmation message is shown
+    expect(getByText(appointment, "Are you sure you would like to delete?")).toBeInTheDocument();
+  
+    // 6. Click the "Confirm" button to proceed with deletion
+    fireEvent.click(getByText(appointment, "Confirm"));
+  
+    // 7. Check that the element with the text "Deleting..." is displayed
+    expect(getByText(appointment, "Deleting...")).toBeInTheDocument();
+  
+    // 8. Wait until the element with the text "Could not delete appointment." is displayed
+    await findByText(appointment, "Could not cancel appointment.");
+  
+    // 9. Check that the appointment shows the error message
+    expect(getByText(appointment, "Could not cancel appointment.")).toBeInTheDocument();
   });
-
 
 });
