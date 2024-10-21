@@ -1,6 +1,7 @@
 import React from "react";
 
 import DayListItem from "components/DayListItem";
+//import fixtures from "path/to/fixtures"; // Adjust the import path as needed
 
 export default function DayList(props) {
   const days = props.days.map(day => {

@@ -10,6 +10,7 @@ import reducer, {
 
 import useRealTimeUpdate from "hooks/useRealtimeUpdate";
 
+
 export default function useApplicationData() {
   const [state, dispatch] = useReducer(reducer, {
     day: "Monday",
@@ -49,6 +50,7 @@ export default function useApplicationData() {
   }
 
   function cancelInterview(id) {
+  
     return axios.delete(`/api/appointments/${id}`).then(() => {
       dispatch({
         type: SET_INTERVIEW,
@@ -56,7 +58,7 @@ export default function useApplicationData() {
         interview: null
       });
     });
-  }
+   }
 
   return {
     state,

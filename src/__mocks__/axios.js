@@ -83,31 +83,74 @@ export default {
       });
     }
   }),
+
+  // Adding the PUT method
+  put: jest.fn((url, data) => {
+    return new Promise((resolve, reject) => {
+      if (url.startsWith("/api/appointments/")) {
+        const appointmentId = parseInt(url.split("/").pop()); // Extracting the appointment ID from the URL. /api/appointments/1. The output is 1
+        if (fixtures.appointments[appointmentId]) {
+          fixtures.appointments[appointmentId].interview = data.interview; // Update the appointment
+          resolve({
+            status: 204,
+            statusText: "No Content",
+          });
+        } else {
+          reject(new Error("Appointment not found"));
+        }
+      } else {
+        reject(new Error("Invalid URL"));
+      }
+    });
+  }),
+  
+  delete: jest.fn((url) => {
+    return new Promise((resolve, reject) => {
+      //console.log("Delete URL:", url); // Log the incoming URL
+  
+      if (url.startsWith("/api/appointments/")) {
+        const appointmentId = parseInt(url.split("/").pop());
+        //console.log("Parsed appointment ID:", appointmentId); // Log parsed ID
+        const appointment = fixtures.appointments[appointmentId];
+  
+        if (appointment) {
+          //console.log("Appointment found:", appointment);
+          
+          // Remove the appointment from fixtures
+          delete fixtures.appointments[appointmentId];
+  
+          // Find the day that contains the deleted appointment
+          Object.values(fixtures.days).forEach(day => {
+            if (day.appointments.includes(appointmentId)) {
+              //console.log("includes appointmentID: ", day.appointments.includes(appointmentId));
+              //console.log("EXISTING spots:", day.name, day.spots);
+  
+              // **Before filtering**
+              //console.log("BEFORE filtering, day.appointments:", day.appointments);
+              //console.log("BEFORE filtering, day.spots:", day.spots);
+              
+              // Remove the appointment ID from the day's appointments
+              day.appointments = day.appointments.filter(id => id !== appointmentId);
+              
+              // **After filtering**
+              //console.log("AFTER filtering, updated day.appointments:", day.appointments);
+              // Increment the spots for that day
+              day.spots += 1; 
+              //console.log("AFTER DELETE, updated day spots: ", day.spots);
+            }
+          });
+  
+          resolve({
+            status: 204,
+            statusText: "No Content",
+          });
+        } else {
+          reject(new Error("Appointment not found"));
+        }
+      } else {
+        reject(new Error("Invalid URL"));
+      }
+    });
+  }),
+  
 };
-
-// USING OBJECT METHOD
-// const urlMap = {
-//   "/api/days": Promise.resolve({
-//     status: 200,
-//     statusText: "OK",
-//     data: fixtures.days,
-//   }),
-  
-//   "/api/appointments": Promise.resolve({
-//     status: 200,
-//     statusText: "OK",
-//     data: fixtures.appointments,
-//   }),
-  
-//   "/api/interviewers": Promise.resolve({
-//     status: 200,
-//     statusText: "OK",
-//     data: fixtures.interviewers,
-//   }),
-// };
-
-// export default {
-//   get: jest.fn((route) => {
-//     return urlMap[route] || Promise.reject(new Error("Not Found"));
-//   }),
-// };
