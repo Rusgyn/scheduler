@@ -144,5 +144,50 @@ describe("Application", () => {
     axios.put.mockRejectedValueOnce();
   });
 
+  /* test number six */
+  it("shows the save error when failing to save an appointment", async () => {
+    // Reset the fixtures before each test
+    axiosMock.resetFixtures();
+  
+    // Setup your mock to reject the promise when the save function is called
+    axiosMock.put.mockRejectedValueOnce(new Error("Could not save appointment."));
+  
+    // 1. Render the Application
+    const { container, debug } = render(<Application />);
+  
+    // 2. Wait until the text "Archie Cohen" is displayed
+    await findByText(container, "Archie Cohen");
+  
+    // 3. Click the "Edit" button on the booked appointment
+    const appointment = getAllByTestId(container, "appointment").find((appointment) => queryByText(appointment, "Archie Cohen"));
+    fireEvent.click(getByAltText(appointment, "Edit"));
+  
+    // 4. Enter the name "Lydia Miller-Jones" into the input with the placeholder "Enter Student Name"
+    fireEvent.change(getByPlaceholderText(appointment, /enter student name/i), {
+      target: { value: "Lydia Miller-Jones" },
+    });
+  
+    // 5. Click the first interviewer in the list
+    fireEvent.click(getByAltText(appointment, "Sylvia Palmer"));
+  
+    // 6. Click the "Save" button on that same appointment
+    fireEvent.click(getByText(appointment, "Save"));
+  
+    // 7. Check that the element with the text "Saving..." is displayed
+    expect(getByText(appointment, "Saving...")).toBeInTheDocument();
+  
+    // 8. Wait until the element with the text "Could not book appointment." is displayed
+    await findByText(appointment, "Could not book appointment.");
+  
+    // 9. Check that the appointment shows the error message
+    expect(getByText(appointment, "Could not book appointment.")).toBeInTheDocument();
+  });
+  
+
+  /* test number seven */
+  it("shows the delete error when failing to delete an existing appointment", () => {
+
+  });
+
 
 });
